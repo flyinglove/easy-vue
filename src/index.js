@@ -1,44 +1,34 @@
-import Compiler from './compiler'
-import Observer from './observer'
+// import Compiler from './compiler'
+// import Observer from './observer'
 
 class Vue {
     constructor(options) {
         this.$options = options
-        this.$data = options.data
+        this.$data = options.data || {}
         this.$el = typeof options.el === 'string' ? document.querySelector(options.el) : options.el
-        this._proxyData(options.data)
-        new Observer(options.data)
+        this._proxyData(this.$data)
+        new Observer(this.$data)
         new Compiler(this)
     }
-    _proxyData(obj) {
+    _proxyData(data) {
         let that = this
-        Object.keys(obj).forEach(key => {
-            const value = obj[key]
+        Object.keys(data).forEach(key => {
+            let value = data[key]
             Object.defineProperty(that, key, {
                 configurable: true,
                 enumerable: true,
                 get() {
-                    return obj[key]
+                    return data[key]
                 },
                 set(newVal) {
                     if (newVal === value) return
-                    value = newVal
-                    new Observer(newVal)
+                    data[key] = newVal
                 }
             })
         })
     }
 }
 
-const vm = new Vue({
-    el: '#app',
-    data: {
-        msg: 'hello',
-        htmlMsg: "<h1>HtmlMsg</h1>",
-        test: {
-            testMsg: 'msg',
-        }
-    }
-})
+
 // window.Vue = Vue
 // export default Vue

@@ -1,6 +1,7 @@
+// import Dep from "./dep"
+
 class Observer {
     constructor(data) {
-        this.data = data
         this.walk(data)
     }
     walk(data) {
@@ -11,22 +12,26 @@ class Observer {
 
     }
     defineReactive(obj, key, val) {
-        if (typeof val === 'object') {
-            this.walk(val)
-        }
+        let that = this
+        let dep = new Dep()
+        this.walk(val)
         Object.defineProperty(obj, key, {
             enumerable: true,
             configurable: true,
             get() {
+                // 收集依赖
+                Dep.target && dep.addSub(Dep.target)
                 return val
             },
             set(newVal) {
                 if (val === newVal) return
                 val = newVal
-                this.walk(val)
+                that.walk(val)
+                // 
+                dep.notify()
             }
         })
     }
 }
 
-export default Observer
+// export default Observer

@@ -7,13 +7,13 @@ module.exports = {
         filename: 'bundle.js'
     },
     devServer: {
-        contentBase: path.join(__dirname, 'dist'),
+        contentBase: path.join(__dirname, 'src'),
         hot: true
     },
     plugins: [
-        new HtmlWebpackPlugin({
-            template: './src/index.html',
-            inject: "body"
-        })
+        // new HtmlWebpackPlugin({
+        //     template: './src/index.html',
+        //     inject: "body"
+        // })
     ]
 }

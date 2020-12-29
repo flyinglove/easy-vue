@@ -12,9 +12,24 @@
         {{msg}}
         <p v-text="msg"></p>
         <p v-html="htmlMsg"></p>
+        <input type="text" v-model="msg">
     </div>
-    <!-- <script>
-       
-    </script> -->
+    <script src='./dep.js'></script>
+    <script src='./watcher.js'></script>
+    <script src='./observer.js'></script>
+    <script src='./compiler.js'></script>
+    <script src="./index.js"></script>
+    <script>
+       const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'hello',
+                htmlMsg: "<h1>HtmlMsg</h1>",
+                test: {
+                    testMsg: 'msg',
+                }
+            }
+        })
+    </script>
 </body>
 </html>
