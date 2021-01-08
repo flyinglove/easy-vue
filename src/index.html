@@ -13,6 +13,7 @@
         <p v-text="msg"></p>
         <p v-html="htmlMsg"></p>
         <input type="text" v-model="msg">
+        <div v-on:click="clickHandler">click Me</div>
     </div>
     <script src='./dep.js'></script>
     <script src='./watcher.js'></script>
@@ -27,6 +28,11 @@
                 htmlMsg: "<h1>HtmlMsg</h1>",
                 test: {
                     testMsg: 'msg',
+                }
+            },
+            methods: {
+                clickHandler() {
+                    console.log(this.msg)
                 }
             }
         })

@@ -23,8 +23,15 @@ class Compiler {
         const attributes = Array.from(node.attributes)
         attributes.forEach(attribute => {
             let { name, value } = attribute
-            name = name.substr(2)
-            this.update(node, value, name)
+            if (this.isEventDirective(name)) {
+                name = this.getAdvancedDirectiveValue(name)
+                this.eventUpdater(node, value, name)
+                return
+            }
+            if (this.isNormalDirective(name)) {
+                name = name.substr(2)
+                this.update(node, value, name)
+            }
         })
     }
     update(node, key, attrName) {
@@ -43,6 +50,10 @@ class Compiler {
         new Watcher(this.vm, key, (newValue) => {
             node.innerHTML = newValue
         })
+    }
+    eventUpdater(node, value, key) {
+        // console.log(node, value, key, '--')
+        node.addEventListener(key, this.vm[value])
     }
     modelUpdater(node, value, key) {
         node.value = value
@@ -66,8 +77,15 @@ class Compiler {
             })
         }
     }
-    isDirective(attrName) {
+    getAdvancedDirectiveValue(attrname) {
+        if (attrname.startsWith('@')) return attrname.slice(1)
+        if (attrname.startsWith('v-on:')) return attrname.replace('v-on:', '')
+    }
+    isNormalDirective(attrName) {
         return attrName.startsWith('v-')
+    }
+    isEventDirective(attrName) {
+        return attrName.startsWith('@') || attrName.startsWith('v-on')
     }
     isElementNode(node) {
         return node.nodeType === 1
